@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Author: BR -->
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"> -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+  </head>
+  <body>
+    <div class="pt-5">
+      <h3 class="container d-flex justify-content-center pb-5">Estoque</h3>
+      <form id="mainForm" class="container pt-3"></form>
+    </div>
+
+    <script>
+      function submitComponent(extraClasses) {
+        return `<button type="submit" class="btn btn-primary ${extraClasses || ""}">Enviar</button>`;
+      }
+      function inputComponent(elementName, type) {
+        var input = `
+          <label for="input-${elementName}" class="form-label">${elementName}</label>
+          <input type="${type || "text"}" class="form-control" data-name="${elementName}" id="input-${elementName}1" placeholder="${elementName}">
+        `;
+        return divWrapper("form-group", input);
+      }
+
+      function selectorComponent(elementName, list) {
+        var selector = `
+          <label for="select-${elementName}" class="form-label">${elementName}</label>
+          <select id="select-${elementName}" class="form-select" data-name="${elementName}" aria-label="Tipo">
+            ${list.map(function(item) {
+              return `<option value="${item}">${item}</option>`;
+            })}
+          </select>
+        `;
+
+        return divWrapper("form-group", selector);
+      }
+
+      function divWrapper(classes, element) {
+        return `<div class="${classes}">${element}</div>`;
+      }
+
+      //TODO, for para imprimir o valor, for para imprimir o tipo, usar switch para chamar a função
+      var inputFields = {"Produto": ["AC1", "AC2", "AC3"], "Quantidade": "number", "Lote": "number", "Data": "text", "Confirmado": ["", "Sim", "Não"], "Observação": "text"};
+      var mainForm = document.querySelector('#mainForm');
+
+      mainForm.insertAdjacentHTML("beforeend", divWrapper("mb-3", selectorComponent("Produto", ["Argamassa Megamassa AC1", "Argamassa Megamassa AC2", "Argamassa Megamassa AC3"])));
+      mainForm.insertAdjacentHTML("beforeend", divWrapper("mb-3", inputComponent('Quantidade', 'number')));
+      mainForm.insertAdjacentHTML("beforeend", divWrapper("mb-3", inputComponent('Lote', 'number')));
+      mainForm.insertAdjacentHTML("beforeend", divWrapper("mb-3", inputComponent('Reprocessado (em sacas)', 'number')));
+      mainForm.insertAdjacentHTML("beforeend", divWrapper("mb-3", inputComponent('Data')));
+      mainForm.insertAdjacentHTML("beforeend", divWrapper("mb-3", selectorComponent('Confirmado', ["", "Sim", "Não"])));
+      mainForm.insertAdjacentHTML("beforeend", divWrapper("mb-3", inputComponent('Observação')));
+      mainForm.insertAdjacentHTML("beforeend", divWrapper("col-12 d-flex justify-content-end pt-4", submitComponent("col-4")));
+
+      var params = new URLSearchParams(location.search);
+      var phoneNumber = params.get('phone') || "123456789";
+
+      mainForm.addEventListener("submit", function(e) {
+        e.preventDefault();
+        var url = `https://wa.me/${phoneNumber}?text=Informações de estoque%0A%0A`;
+        var text = "";
+        for (var index = 0; index < e.target.length; index++) {
+          var element = e.target[index];
+          if (element.value) {
+            if (text.length) {
+              text += `%0A`
+            }
+            // console.log(element.getAttribute("data-name"), element.value);
+            text += `${element.getAttribute("data-name")}:${element.value}`
+          }
+        }
+
+        if (text) {
+          // window.open(url + text, '_blank').focus();
+          window.location = url + text;
+        }
+      });
+    </script>
+  </body>
+</html>

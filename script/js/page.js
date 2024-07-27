@@ -1,10 +1,5 @@
 "use strict";
 
-var mainForm = document.querySelector("#mainForm");
-var title = document.querySelector("#title");
-title.insertAdjacentHTML("beforeend", `${formData.title}`);
-fillForm(formData.components);
-
 function fillForm(inputFields) {
   Object.keys(inputFields).forEach(function (key) {
     var componentContent = inputFields[key];
@@ -29,7 +24,7 @@ function fillForm(inputFields) {
     e.preventDefault();
     var params = new URLSearchParams(location.search);
     var phoneNumber = params.get("phone") || "123456789";
-    var url = `https://wa.me/${phoneNumber}?text=Informações de estoque%0A%0A`;
+    var url = `https://wa.me/${phoneNumber}?text=${formData.titleWpp}%0A%0A`;
     var text = "";
     for (var index = 0; index < e.target.length; index++) {
       var element = e.target[index];
@@ -47,3 +42,9 @@ function fillForm(inputFields) {
     }
   });
 }
+
+var mainForm = document.querySelector("#mainForm");
+var title = document.querySelector("#title");
+title.insertAdjacentHTML("beforeend", `${formData.title}`);
+fillForm(formData.components);
+

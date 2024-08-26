@@ -42,9 +42,12 @@ function fillForm(inputFields) {
     }
   });
 }
+$(document).ready(function(){
+  $('.money').mask('000.000.000.000.000,00', {reverse: true});
+});
 
 var mainForm = document.querySelector("#mainForm");
 var title = document.querySelector("#title");
-title.insertAdjacentHTML("beforeend", `${formData.title}`);
+title.insertAdjacentHTML("beforeend", `${formData.title || "Formulário não encontrado"}`);
 fillForm(formData.components);
 

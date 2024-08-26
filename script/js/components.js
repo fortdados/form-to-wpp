@@ -5,10 +5,17 @@ function submitComponent(extraClasses) {
 }
 
 function inputComponent(componentId, componentContent) {
-  var label = componentContent.label || componentId;
+  var {label, type, extraClasses, ...attributes} = componentContent;
+
+  var attributesString = "";
+
+  Object.entries(attributes).map(function (entry) {
+    attributesString += `${attributesString.length ? " " : ""}${entry[0]}=${entry[1]}`
+  });
+
   var input = `
-    <label for="input-${componentId}" class="form-label">${label}</label>
-    <input type="${componentContent.type || "text"}" class="form-control" data-name="${componentId}" id="input-${componentId}" placeholder="${label}">
+    <label class="form-label" for="input-${componentId}">${label || componentId}</label>
+    <input type="${type || "text"}" class="form-control ${extraClasses}" data-name="${componentId}" id="input-${componentId}" placeholder="${label || componentId}"  ${attributesString || ""}>
   `;
   return divWrapper("form-group", input);
 }

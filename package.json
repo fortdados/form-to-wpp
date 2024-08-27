@@ -1,0 +1,27 @@
+{
+  "name": "form-to-wpp",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "homepage": "http://fortdados.github.io/form-to-wpp",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fortdados/form-to-wpp.git"
+  },
+  "scripts": {
+    "build": "webpack --mode production",
+    "dev": "webpack --mode development --watch",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "dotenv": "^8.2.0",
+    "gh-pages": "^6.1.1",
+    "html-webpack-plugin": "^5.6.0",
+    "webpack": "^5.94.0",
+    "webpack-cli": "^5.1.4"
+  }
+}

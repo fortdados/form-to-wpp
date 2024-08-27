@@ -37,3 +37,11 @@ function selectorComponent(componentId, componentContent) {
 function divWrapper(classes, element) {
   return `<div class="${classes}">${element}</div>`;
 }
+
+
+module.exports = {
+  divWrapper: divWrapper,
+  inputComponent: inputComponent,
+  submitComponent: submitComponent,
+  selectorComponent: selectorComponent
+}

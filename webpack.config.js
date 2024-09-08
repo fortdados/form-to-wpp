@@ -16,7 +16,7 @@ module.exports = {
       'tabsMap': JSON.stringify(dotenv.parsed.TABSMAP || '{}')
     }),
     new HtmlWebpackPlugin({
-      template: './src/index.html'
+      template: './src/index.ejs'
     }),
   ]
 }

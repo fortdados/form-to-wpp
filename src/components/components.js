@@ -4,28 +4,38 @@ function submitComponent(extraClasses) {
   return `<button type="submit" class="btn btn-primary ${extraClasses || ""}">Enviar</button>`;
 }
 
-function inputComponent(componentId, componentContent) {
-  var {label, type, extraClasses, ...attributes} = componentContent;
-
+function attributesToString(attributes) {
   var attributesString = "";
 
   Object.entries(attributes).map(function (entry) {
     attributesString += `${attributesString.length ? " " : ""}${entry[0]}=${entry[1]}`
   });
 
+  return attributesString;
+}
+
+function inputComponent(componentId, componentContent) {
+  var {label, type, extraClasses, ...attributes} = componentContent;
+
+  var attributesString = attributesToString(attributes);
+
   var input = `
     <label class="form-label" for="input-${componentId}">${label || componentId}</label>
-    <input type="${type || "text"}" class="form-control ${extraClasses}" data-name="${componentId}" id="input-${componentId}" placeholder="${label || componentId}"  ${attributesString || ""}>
+    <input type="${type || "text"}" class="form-control ${extraClasses}" data-name="${componentId}" id="input-${componentId}" placeholder="${label || componentId}" ${attributesString || ""}>
   `;
   return divWrapper("form-group", input);
 }
 
 function selectorComponent(componentId, componentContent) {
-  var label = componentContent.label || componentId;
+  var {label, options, extraClasses, ...attributes} = componentContent;
+
+  var attributesString = attributesToString(attributes);
+
+  // var label = componentContent.label || componentId;
   var selector = `
-    <label for="select-${componentId}" class="form-label">${label}</label>
-    <select id="select-${componentId}" class="form-select" data-name="${componentId}" aria-label="${label}">
-      ${componentContent.options.map(function(item) {
+    <label for="select-${componentId}" class="form-label">${label || componentId}</label>
+    <select id="select-${componentId}" class="form-select ${extraClasses}" data-name="${componentId}" aria-label="${label || componentId}"  ${attributesString || ""}>
+      ${options.map(function(item) {
         return `<option value="${item}">${item}</option>`;
       })}
     </select>

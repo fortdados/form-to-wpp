@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Author: BR -->
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery-mask-plugin@1.14.16/dist/jquery.mask.min.js" crossorigin="anonymous"></script>
+  </head>
+  <body>
+    <div class="pt-5 pb-5">
+      <h3 id="title" class="container title d-flex justify-content-center"></h3>
+      <form id="mainForm" class="container pt-3 pb-3"  method="post"></form>
+    </div>
+    <script defer>
+      var tabsMapping = JSON.parse('<%= tabsMap %>');
+      var params = new URLSearchParams(location.search);
+      var form = tabsMapping[params.get("form")] || {};
+
+      document.addEventListener('dynamicForm:loaded', function(){
+        var event = new CustomEvent("dynamicForm:create", {detail: {
+          form: form,
+          titleSelector: "#title",
+          formSelector: "#mainForm",
+          callback: function (mainForm, form) {
+            mainForm.addEventListener("submit", function(e) {
+              var params = new URLSearchParams(location.search);
+              e.preventDefault();
+              var phoneNumber = params.get("phone") || "123456789";
+              var url = `https://wa.me/${phoneNumber}?text=${form.titleWpp || ""}%0A%0A`;
+              var text = "";
+              for (var index = 0; index < e.target.length; index++) {
+                var element = e.target[index];
+                if (element.value) {
+                  if (text.length) {
+                    text += `%0A`
+                  }
+                  text += `${element.getAttribute("data-name")}:${element.value}`
+                }
+              }
+
+              if (text) {
+                // window.open(url + text, "_blank").focus();
+                window.location = url + text;
+              }
+            });
+          }
+        }});
+
+        document.dispatchEvent(event);
+      });
+      
+    </script>
+  </body>
+</html>
